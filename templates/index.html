@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DeepDent</title>
+  <link rel="stylesheet" href="static/styles.css" />
+</head>
+<body>
+  <!-- Top Section with Logo and Title -->
+  <div class="top-bar">
+    <div class="container">
+      <h1 class="app-title">
+        <span class="italic-d">D</span>eep<span class="italic-d">D</span>ent
+      </h1>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h2 class="hero-title">Protect Your Smile</h2>
+      <p class="hero-subtitle">
+        Gingivitis is the early stage of gum disease that causes inflammation of the gums. It shows up as red, swollen gums that may bleed when you brush or floss. Without treatment, it can lead to more serious problems and even tooth loss. Most people experience gingivitis at some point, but many don't recognize the early warning signs.
+        DeepDent helps identify signs of gingivitis before it becomes a serious problem. Our technology analyzes images of your gums to detect early warning signs that might be easy to miss. Early detection means simpler treatment and better outcomes for your dental health.
+      </p>
+      <button class="cta-button" id="startButton">Start Analysis</button>
+    </div>
+    <div class="hero-image">
+      <img src="assets/1.jpg" alt="Dental Technology" id="heroImage" />
+    </div>
+  </section>
+
+  <!-- Disclaimer Modal -->
+  <div class="modal-backdrop" id="disclaimerModal">
+    <div class="modal">
+      <h3 class="modal-title">Important Disclaimer</h3>
+      <div class="modal-content">
+        <p>DeepDent provides AI-assisted analysis of dental images but is not a replacement for professional dental care. The results should be used for informational purposes only and not as a definitive diagnosis.</p>
+        <p>By proceeding, you acknowledge that:</p>
+        <ul>
+          <li>This tool is not a substitute for professional dental advice</li>
+          <li>You should consult with a qualified dentist for proper diagnosis</li>
+          <li>Your images will be processed securely and privately</li>
+        </ul>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-button secondary" id="cancelButton">Cancel</button>
+        <button class="modal-button primary" id="agreeButton">I Agree</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const titleEl = document.getElementById('pageTitle');
+    if (window.location.pathname.includes('analysis.html')) {
+      titleEl.textContent = 'DeepDent / Analysis';
+    }
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
