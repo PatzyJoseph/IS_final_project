@@ -49,28 +49,24 @@ def sigmoid(x):
 
 def postprocess(output_data):
     detections = []
-    output = np.squeeze(output_data)  # (7, 8400)
-    boxes = output[:4, :]             # x, y, w, h
-    objectness = sigmoid(output[4, :])    # shape (8400,)
-    class_scores = sigmoid(output[5:, :]) # shape (num_classes, 8400)
-    scores = objectness * class_scores    # (num_classes, 8400)
-
-    for class_idx in range(scores.shape[0]):
-        class_scores_filtered = scores[class_idx]
-        mask = class_scores_filtered >= CONFIDENCE_THRESHOLD
-        for i in np.where(mask)[0]:
-            cx, cy, w, h = boxes[:, i]
+    output = np.squeeze(output_data)  # (8400, 7)
+    for i in range(output.shape[0]):
+        x, y, w, h, objectness, *class_scores = output[i]
+        class_scores = sigmoid(np.array(class_scores))
+        objectness = sigmoid(objectness)
+        score = objectness * np.max(class_scores)
+        class_idx = np.argmax(class_scores)
+        if score >= CONFIDENCE_THRESHOLD:
+            cx, cy = x, y
             x1 = max(0, cx - w / 2)
             y1 = max(0, cy - h / 2)
             x2 = cx + w / 2
             y2 = cy + h / 2
-
             detections.append({
                 "class": SYMPTOM_CLASSES.get(class_idx, str(class_idx)),
-                "confidence": float(class_scores_filtered[i]),
+                "confidence": float(score),
                 "bbox": [float(x1), float(y1), float(x2), float(y2)]
             })
-
     return detections
     
 def predict(image_bytes):
