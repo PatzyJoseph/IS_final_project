@@ -1,4 +1,3 @@
-<!-- analysis.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload - DeepDent</title>
     <link rel="stylesheet" href="static/styles.css">
+    <style>
+        /* Basic styling for the message box - assuming it's not in styles.css */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+        /* Simple loading spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3b82f6; /* Tailwind blue-500 equivalent */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Styles for drag-and-drop feedback */
+        .file-upload-container.drag-over {
+            border-color: #2563eb; /* Blue border on drag over */
+            background-color: #f5f7fa; /* Light blue background */
+        }
+
+        /* Styles for analysis results */
+        .status-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .status-value {
+            font-weight: normal; /* Override bold from parent if needed */
+        }
+        .status-value.detected {
+            color: #dc2626; /* Red for detected */
+        }
+        .status-value.not-detected {
+            color: #16a34a; /* Green for not detected */
+        }
+        .symptom-list {
+            list-style: disc;
+            margin-left: 20px;
+        }
+        .symptom-value {
+            font-weight: normal;
+        }
+        .detected-symptoms-section {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        .detected-symptoms-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .detected-symptoms-list {
+            list-style: disc;
+            margin-left: 20px;
+        }
+        .loading-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+    </style>
 </head>
 <body>
-    <!-- Top Bar -->
     <div class="top-bar">
         <div class="container">
           <h1 class="app-title">
@@ -21,9 +99,7 @@
         </div>
     </div>
 
-    <!-- Main Content Section -->
     <div class="main-content">
-        <!-- Left Side: Tutorial Section with Sample Image and Steps -->
         <div class="tutorial-container">
             <img src="../assets/sample.jpg" alt="Sample Gingivitis Image" class="tutorial-image">
             <ol class="upload-steps">
@@ -33,36 +109,53 @@
             </ol>
         </div>
 
-        <!-- Right Side: Upload Section -->
         <section class="upload-section" id="uploadSection">
             <h2 class="upload-title">Check for Gingivitis</h2>
             <p class="upload-description">Upload a clear image of your gums to begin the analysis.</p>
             <div class="file-upload-container" id="fileUploadContainer">
                 <div class="file-upload-icon">📁</div>
-                <p class="file-upload-text">Click or drag and drop your image here</p>
+                <p class="file-upload-text" id="fileUploadText">Click or drag and drop your image here</p>
                 <input type="file" class="file-upload-input" id="fileUpload" accept="image/*">
             </div>
-           <div id="imagePreview" class="image-preview hidden">
+            <div id="imagePreview" class="image-preview hidden">
                 <h3 class="preview-title">Your Uploaded Image</h3>
                 <div style="position: relative; display: inline-block;">
                     <img src="" alt="Uploaded Gum Image Preview" class="preview-image" id="uploadedImage" width="640" height="640">
-                    <canvas id="canvas" width="640" height="640" style="position: absolute; top: 0; left: 0;"></canvas>
+                    <canvas id="canvas" width="640" height="640" style="position: absolute; top: 0; left: 0; display: none;"></canvas>
                 </div>
             </div>
 
-            <button class="submit-button" id="submitButton">Submit for Analysis</button>
+            <button class="submit-button" id="submitButton" disabled>Submit for Analysis</button>
+            <div id="loadingIndicator" class="loading-indicator hidden">
+                <div class="spinner"></div>
+                <span>Analyzing...</span>
+            </div>
         </section>
     </div>
 
-   
-    <!-- Analysis Result Section -->
     <div id="analysisResult" class="analysis-result hidden">
         <div class="result-container">
             <h3 class="result-title">Analysis Result</h3>
-            <img src="" alt="Gingivitis Detection Result" class="result-image">
+            <img src="" alt="Gingivitis Detection Result" class="result-image" id="resultImage">
+            <div class="detection-details">
+                <p class="status-label">Overall Gingivitis Status: <span id="gingivitisStatus" class="status-value">N/A</span></p>
+                <ul class="symptom-list">
+                    <li>Bleeding: <span id="bleedingStatus" class="symptom-value">N/A</span></li>
+                    <li>Redness: <span id="rednessStatus" class="symptom-value">N/A</span></li>
+                    <li>Swelling: <span id="swellingStatus" class="symptom-value">N/A</span></li>
+                </ul>
+                <div class="detected-symptoms-section">
+                    <h4 class="detected-symptoms-title">Detected Symptoms:</h4>
+                    <ul id="detectionsList" class="detected-symptoms-list">
+                        <li>No detections yet.</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <button class="try-again-button">Try Again</button>
+        <button class="try-again-button" id="tryAgainButton">Try Again</button>
     </div>
+
+    <div class="message-box" id="messageBox"></div>
 
     <script src="static/analysis.js"></script>
 </body>
