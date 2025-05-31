@@ -1,3 +1,4 @@
+// script.js
 // DOM Elements
 const startButton = document.getElementById('startButton');
 const disclaimerModal = document.getElementById('disclaimerModal');
