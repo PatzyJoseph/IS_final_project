@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import os
 import io
 import base64
@@ -52,7 +52,11 @@ SYMPTOM_CLASSES = {
 @app.route("/")
 def index():
     # Flask automatically serves templates/index.html
-    return render_template("analysis.html")
+    return render_template("index.html")
+
+@app.route('/assets/<path:filename>')
+def custom_static(filename):
+    return send_from_directory('assets', filename)
 
 @app.route("/analysis")
 def analysis():
@@ -129,9 +133,12 @@ def predict_route():
         # Determine overall symptom presence based on detected classes
         classes_detected = [d['class'].lower() for d in detections_list]
 
+        # Define required symptoms
+        required_symptoms = ['redness', 'bleeding', 'swelling']
+
         results_for_frontend = {
             "detections": detections_list,
-            "gingivitis": any(cls in classes_detected for cls in ['redness', 'bleeding', 'swelling']),
+            "gingivitis": all(cls in classes_detected for cls in required_symptoms),
             "bleeding": 'bleeding' in classes_detected,
             "redness": 'redness' in classes_detected,
             "swelling": 'swelling' in classes_detected # This will now correctly reflect if swelling is detected

@@ -20,6 +20,11 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
+      <div class="logo-row">
+        <img src="{{ url_for('custom_static', filename='1.svg') }}" alt="Logo 1" class="partner-logo" />
+        <img src="{{ url_for('custom_static', filename='2.svg') }}" alt="Logo 2" class="partner-logo" />
+      </div>
+
       <h2 class="hero-title">Protect Your Smile</h2>
       <p class="hero-subtitle">
         Gingivitis is the early stage of gum disease that causes inflammation of the gums. It shows up as red, swollen gums that may bleed when you brush or floss. Without treatment, it can lead to more serious problems and even tooth loss. Most people experience gingivitis at some point, but many don't recognize the early warning signs.
@@ -28,7 +33,7 @@
       <button class="cta-button" id="startButton">Start Analysis</button>
     </div>
     <div class="hero-image">
-      <img src="assets/1.jpg" alt="Dental Technology" id="heroImage" />
+      <img src="{{ url_for('custom_static', filename='1.jpg') }}" alt="Dental Technology" id="heroImage" />
     </div>
   </section>
 
@@ -54,10 +59,10 @@
 
   <script>
     const titleEl = document.getElementById('pageTitle');
-    if (window.location.pathname.includes('analysis.html')) {
+    if (window.location.pathname.includes('analysis')) {
       titleEl.textContent = 'DeepDent / Analysis';
     }
   </script>
-  <script src="script.js"></script>
+  <script src="static/script.js"></script>
 </body>
 </html>

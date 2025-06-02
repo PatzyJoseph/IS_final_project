@@ -24,7 +24,7 @@ cancelButton.addEventListener('click', () => {
 agreeButton.addEventListener('click', () => {
     disclaimerModal.style.display = 'none';
     // Redirect to analysis page
-    window.location.href = 'analysis.html';
+    window.location.href = 'analysis';
 });
 
 disclaimerModal.addEventListener('click', (e) => {

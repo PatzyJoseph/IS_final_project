@@ -1,3 +1,5 @@
+console.log("Script loaded");
+
 // DOM Elements
 const fileUpload = document.getElementById('fileUpload');
 const fileUploadContainer = document.getElementById('fileUploadContainer');
@@ -216,4 +218,65 @@ tryAgainButton.addEventListener('click', () => {
     swellingStatus.textContent = 'N/A';
     swellingStatus.classList.remove('detected', 'not-detected');
     detectionsList.innerHTML = '<li>No detections yet.</li>';
+
+    async function loadRecommendations() {
+        try {
+            const response = await fetch("static/recommendations.json");
+            if (!response.ok) throw new Error('Failed to load recommendations.json');
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Error loading recommendations:", error);
+            return {};
+        }
+        }
+   function displayRecommendations(detectedSymptoms, recommendations) {
+        const section = document.getElementById("recommendationsSection");
+        const messageBox = document.getElementById("recommendationContent");
+        messageBox.innerHTML = ""; // Clear previous
+        section.style.display = "block";
+
+        detectedSymptoms.forEach(symptom => {
+            const data = recommendations[symptom];
+            if (data) {
+            const div = document.createElement("div");
+            div.className = "recommendation-section";
+            div.innerHTML = `
+                <h4>${symptom.charAt(0).toUpperCase() + symptom.slice(1)} Recommendation</h4>
+                <p><strong>Message:</strong> ${data.primary_message}</p>
+                <p><strong>Immediate Recommendations:</strong> ${data.immediate_recommendations}</p>
+                <p><strong>Watch for:</strong> ${data.watch_for_additional_symptoms}</p>
+                <p><strong>Possible Causes:</strong> ${data.possible_causes}</p>
+                <p><strong>Consultation Advice:</strong> ${data.professional_consultation}</p>
+                <p><strong>Prevention Tips:</strong> ${data.prevention}</p>
+                <hr>
+            `;
+            messageBox.appendChild(div);
+            }
+        });
+
+        section.style.display = "block";
+    }
+
+    console.log("Detected symptoms:", detectedSymptoms);
+
+    async function handleAnalysisResults(detectedSymptoms) {
+        const recommendations = await loadRecommendations();
+        displayRecommendations(detectedSymptoms, recommendations);
+    }
+
+    document.getElementById("submitButton").addEventListener("click", () => {
+        // Your symptom detection code here
+        const detectedSymptoms = [];
+
+        // Example detection logic:
+        if (bleedingDetected) detectedSymptoms.push("bleeding");
+        if (rednessDetected) detectedSymptoms.push("redness");
+        if (swellingDetected) detectedSymptoms.push("swelling");
+
+        console.log("Detected symptoms:", detectedSymptoms);
+
+        // Then call your function to display recommendations
+        displayRecommendations(detectedSymptoms, symptomRecommendations);
+        });
 });
