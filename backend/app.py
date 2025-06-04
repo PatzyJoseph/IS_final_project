@@ -78,50 +78,35 @@ def predict_route():
         file = request.files['file']
         image_bytes = file.read()
 
-        # Convert image bytes to a format OpenCV can read (numpy array)
         nparr = np.frombuffer(image_bytes, np.uint8)
-        img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR) # Reads as BGR
+        img_np = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
         if img_np is None:
             return jsonify({"error": "Could not decode image. Invalid image format?"}), 400
 
-        # --- Perform Prediction using the loaded YOLOv8 model ---
-        # The 'predict' method handles preprocessing (resizing, normalization) internally.
-        # It returns a list of Results objects (one per image in the batch).
-        # We set conf and iou thresholds here.
         results = yolov8_model.predict(
             source=img_np,
-            conf=0.30, # Confidence threshold (adjust as needed)
-            iou=0.4,   # IoU threshold for Non-Maximum Suppression (adjust as needed)
-            classes=None, # Detect all classes (bleeding, redness, swelling)
-            verbose=False # Suppress verbose output from ultralytics
+            conf=0.30,
+            iou=0.4,
+            classes=None,
+            verbose=False
         )
 
         detections_list = []
         annotated_img_b64 = ""
 
         if results and len(results) > 0:
-            result = results[0] # Get the Results object for the first (and only) image
-
-            # --- Get Annotated Image from YOLOv8 ---
-            # The .plot() method returns the image with bounding boxes and labels drawn on it.
-            # It returns a NumPy array in BGR format.
+            result = results[0]
             annotated_img_np = result.plot()
-
-            # Convert the annotated image from BGR (OpenCV default) to RGB (PIL/frontend expects RGB)
             annotated_img_rgb = cv2.cvtColor(annotated_img_np, cv2.COLOR_BGR2RGB)
 
-            # Convert the annotated image (NumPy array) to a PIL Image, then to bytes, then base64
             pil_img = Image.fromarray(annotated_img_rgb)
             buffered = io.BytesIO()
-            pil_img.save(buffered, format='JPEG') # Save as JPEG for web efficiency
+            pil_img.save(buffered, format='JPEG')
             buffered.seek(0)
             annotated_img_b64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
-            # --- Extract Detection Details ---
-            # Iterate through detected boxes to get class, confidence, and bbox
             for det in result.boxes:
-                # xyxy gives [x1, y1, x2, y2] coordinates
                 x1, y1, x2, y2 = map(int, det.xyxy[0])
                 confidence = float(det.conf[0])
                 class_id = int(det.cls[0])
@@ -131,13 +116,13 @@ def predict_route():
                 detections_list.append({
                     "bbox": [x1, y1, x2, y2],
                     "class": symptom_name,
-                    "confidence": round(confidence, 2) # Round for cleaner display
+                    "confidence": round(confidence, 2)
                 })
+
             print(f"Detected {len(detections_list)} objects.")
         else:
             print("No objects detected by YOLOv8 model.")
 
-        # Determine overall symptom presence based on detected classes
         classes_detected = [d['class'].lower() for d in detections_list]
 
         # Individual symptoms
@@ -175,8 +160,9 @@ def predict_route():
         return jsonify(results_for_frontend)
 
     except Exception as e:
-        print(f"Error in predict_route: {e}") # Print error for server-side debugging
+        print(f"Error in predict_route: {e}")
         return jsonify({"error": str(e)}), 500
+
 
 # ---------- Main ----------
 if __name__ == "__main__":
