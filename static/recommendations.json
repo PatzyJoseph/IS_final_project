@@ -22,5 +22,37 @@
     "possible_causes": "Red gums can result from plaque buildup, poor oral hygiene, aggressive brushing, hormonal changes during puberty, pregnancy or menopause, certain medications, smoking or tobacco use, vitamin deficiencies (particularly vitamin C and K), autoimmune conditions, allergic reactions to dental products, diabetes, stress, or blood disorders. In some cases, persistent gum redness may indicate underlying systemic health conditions that require medical evaluation.",
     "professional_consultation": "Consult a dentist if redness persists after one week of improved oral hygiene, if redness is accompanied by pain or other symptoms, or if you notice changes in gum texture or appearance.",
     "prevention": "Red gums are often an early warning sign. Prevent progression to full gingivitis by establishing excellent oral hygiene habits now. Brush thoroughly twice daily with fluoride toothpaste, floss daily to remove plaque and bacteria between teeth, rinse with antimicrobial mouthwash, avoid smoking and tobacco products, manage diabetes if you have it, limit sugary and alcoholic foods and drinks, and maintain regular dental visits at least once yearly for professional cleanings and checkups."
+  },
+  "bleeding_redness": {
+    "primary_message": "Bleeding and redness detected.",
+    "immediate_recommendations": "Use a soft-bristled toothbrush, avoid harsh brushing.",
+    "watch_for_additional_symptoms": "If swelling appears, this could indicate gingivitis.",
+    "possible_causes": "Early gum irritation due to plaque.",
+    "professional_consultation": "Dental cleaning may be needed soon.",
+    "prevention": "Brush gently and floss regularly."
+  },
+  "redness_swelling": {
+    "primary_message": "Redness and swelling detected.",
+    "immediate_recommendations": "Rinse with salt water, avoid sugary foods.",
+    "watch_for_additional_symptoms": "Bleeding could indicate progression to gingivitis.",
+    "possible_causes": "Gum inflammation or mild infection.",
+    "professional_consultation": "Consider a check-up if it persists.",
+    "prevention": "Improve oral hygiene habits."
+  },
+  "bleeding_swelling": {
+    "primary_message": "Bleeding and swelling detected.",
+    "immediate_recommendations": "Maintain soft brushing and avoid irritants.",
+    "watch_for_additional_symptoms": "If redness occurs, gingivitis is likely.",
+    "possible_causes": "Plaque or early gum disease.",
+    "professional_consultation": "Schedule a dental visit if it continues.",
+    "prevention": "Use antiseptic rinse, brush and floss properly."
+  },
+  "gingivitis": {
+    "primary_message": "All three symptoms detected: likely gingivitis.",
+    "immediate_recommendations": "Use antiseptic mouthwash, brush gently twice daily.",
+    "watch_for_additional_symptoms": "Persistent pain, bad breath, gum recession.",
+    "possible_causes": "Plaque buildup, poor oral hygiene, smoking.",
+    "professional_consultation": "Visit a dentist for professional cleaning and further assessment.",
+    "prevention": "Maintain good oral hygiene, regular dental checkups."
   }
 }

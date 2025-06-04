@@ -1,7 +1,0 @@
-Flask
-tensorflow
-pillow
-ultralytics
-scikit-learn
-numpy
-gunicorn

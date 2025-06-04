@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: deepdent-app
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload - DeepDent</title>
-    <link rel="stylesheet" href="static/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="top-bar">
@@ -21,7 +21,7 @@
 
     <div class="main-content">
         <div class="tutorial-container">
-            <img src="{{ url_for('custom_static', filename='sample.jpg') }}" alt="Sample Gingivitis Image" class="tutorial-image">
+            <img src="{{ url_for('static', filename='assets/sample.jpg') }}" alt="Sample Gingivitis Image" class="tutorial-image">
             <ol class="upload-steps">
                 <li>Take a clear photo of your gums using your phone or camera.</li>
                 <li>Ensure good lighting and quality or better analysis.</li>
@@ -82,6 +82,6 @@
 
     <div id="messageBox" class="message-box"></div>
 
-    <script src="static/analysis.js"></script>
+    <script src="{{ url_for('static', filename='analysis.js') }}"></script>
 </body>
 </html>
