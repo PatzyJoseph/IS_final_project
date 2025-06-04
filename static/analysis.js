@@ -129,9 +129,15 @@ submitButton.addEventListener('click', async () => {
         const data = await response.json();
 
         if (response.ok) {
-            document.getElementById('uploadSection').classList.add('hidden');
+            // Hide upload section but keep image preview visible
+            fileUploadContainer.classList.add('hidden');
+            submitButton.style.display = 'none';
+            loadingIndicator.classList.add('hidden');
+            
+            // Show analysis results
             analysisResultDiv.classList.remove('hidden');
 
+            // Set analysis result image
             if (data.image) {
                 resultImage.src = `data:image/jpeg;base64,${data.image}`;
             }
@@ -159,7 +165,7 @@ submitButton.addEventListener('click', async () => {
                 detectionsList.innerHTML = '<li>No specific symptoms detected with current thresholds.</li>';
             }
 
-            // ✅ Display Recommendations based on detections
+            // Display Recommendations based on detections
             const detectedSymptoms = data.symptom_combinations || [];
 
             if (detectedSymptoms.length > 0) {
@@ -195,11 +201,16 @@ tryAgainButton.addEventListener('click', () => {
     imagePreviewDiv.classList.add('hidden');
     submitButton.disabled = true;
 
+    // Show upload section and hide results
     document.getElementById('uploadSection').classList.remove('hidden');
     analysisResultDiv.classList.add('hidden');
     fileUploadContainer.classList.remove('hidden');
+    submitButton.style.display = 'block';
 
+    // Clear result images
     resultImage.src = '';
+
+    // Reset status displays
     gingivitisStatus.textContent = 'N/A';
     bleedingStatus.textContent = 'N/A';
     rednessStatus.textContent = 'N/A';
@@ -210,6 +221,7 @@ tryAgainButton.addEventListener('click', () => {
     swellingStatus.classList.remove('detected', 'not-detected');
     detectionsList.innerHTML = '<li>No detections yet.</li>';
 
+    // Hide recommendations
     document.getElementById("recommendationsSection").style.display = "none";
     document.getElementById("recommendationContent").innerHTML = '';
 });
