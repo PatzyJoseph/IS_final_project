@@ -29,7 +29,7 @@ This project is developed **in partial fulfillment of the requirements for:**
 
 ## 🌐 Deployed Application
 
-🔗 **Live Application**: [Insert your deployed web app URL here]
+🔗 **Live Application**: [https://is-final-project.onrender.com]
 
 ---
 
